@@ -1,0 +1,8 @@
+*.c
+*.cpp
+*.[oa]
+*.exe
+*.dll
+*.stackdump
+*.in
+*.out

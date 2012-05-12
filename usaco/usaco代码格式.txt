@@ -1,0 +1,85 @@
+The First Challenge
+
+The simplest programming challenge is named 'test' and requires you to read a pair of small integers from a single input line in the file 'test.in' and print their sum to the file 'test.out'.
+
+Below is a simple solution in the 'C' programming language. Note the use of 'exit (0);', which is usually required to exit properly.
+
+/*
+ID: your_id_here
+LANG: C
+TASK: test
+*/
+#include <stdio.h>
+main () {
+    FILE *fin  = fopen ("test.in", "r");
+    FILE *fout = fopen ("test.out", "w");
+    int a, b;
+    fscanf (fin, "%d %d", &a, &b);	/* the two input integers */
+    fprintf (fout, "%d\n", a+b);
+    exit (0);
+}
+Below is a simple solution in the C++ programming language. Note the use of 'return (0);', which is usually required to exit properly.
+
+/*
+ID: your_id_here
+PROG: test
+LANG: C++
+*/
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    ofstream fout ("test.out");
+    ifstream fin ("test.in");
+    int a, b;
+    fin >> a >> b;
+    fout << a+b << endl;
+    return 0;
+}
+Below is a simple solution in the PASCAL programming language:
+
+{
+ID: your_id_here
+PROG: test
+LANG: PASCAL
+}
+Program Test;
+Var fin, fout: text;
+    a, b: word;
+Begin
+    Assign(fin, 'test.in'); Reset(fin);
+    Assign(fout, 'test.out'); Rewrite(fout);
+    Readln(fin, a, b);
+    Writeln(fout, a+b);
+    Close(fout);
+End.
+And here is the same program, this time in JAVA. Note that the program presumes the file opens will succeed, which they will:
+
+/*
+ID: your_id_here
+LANG: JAVA
+TASK: test
+*/
+import java.io.*;
+import java.util.*;
+
+class test {
+  public static void main (String [] args) throws IOException {
+    // Use BufferedReader rather than RandomAccessFile; it's much faster
+    BufferedReader f = new BufferedReader(new FileReader("test.in"));
+                                                  // input file name goes above
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("test.out")));
+    // Use StringTokenizer vs. readLine/split -- lots faster
+    StringTokenizer st = new StringTokenizer(f.readLine());
+						  // Get line, break into tokens
+    int i1 = Integer.parseInt(st.nextToken());    // first integer
+    int i2 = Integer.parseInt(st.nextToken());    // second integer
+    out.println(i1+i2);                           // output result
+    out.close();                                  // close the output file
+    System.exit(0);                               // don't omit this!
+  }
+}
+Important: BufferedReader and StringTokenizer are far more efficient than many other schemes for reading input. They can make a huge difference in the efficiency of your program! Use them!
