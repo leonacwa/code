@@ -1,8 +1,8 @@
-*.c
-*.cpp
-*.[oa]
-*.exe
-*.dll
-*.stackdump
-*.in
-*.out
+/*.c
+/*.cpp
+/*.[oa]
+/*.exe
+/*.dll
+/*.stackdump
+/*.in
+/*.out
