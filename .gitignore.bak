@@ -1,8 +1,0 @@
-*.c
-*.cpp
-*.[oa]
-*.exe
-*.dll
-*.stackdump
-.*.swp
-*.in
