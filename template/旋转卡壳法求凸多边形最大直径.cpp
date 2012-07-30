@@ -1,4 +1,5 @@
 /* Graham-Scan 求凸包 + 旋转卡壳法求凸多边形最大直径
+ * O(n*logn)
  * */
 
 #include <cstdio>
@@ -42,7 +43,6 @@ int graham(int n, Point pt[], int st[])
 	int top = -1;
 	st[++top] = 0;
 	st[++top] = 1;
-	//st[++top] = 2;
 	for (int i = 2; i < n; ++i) {
 		while (top > 0 && cross(pt[i], pt[st[top]], pt[st[top-1]]) >= 0) {
 			--top;
