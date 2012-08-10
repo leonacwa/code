@@ -1,0 +1,416 @@
+
+size 1 1, 0
+E
+
+size 1 2, 1
+BE
+
+size 1 3, 2
+BEB
+
+size 1 4, 2
+BE.B
+
+size 1 5, 2
+BE..B
+
+size 1 6, 2
+BE...B
+
+size 1 7, 2
+BE....B
+
+size 1 8, 2
+BE.....B
+
+size 2 1, 1
+B
+E
+
+size 2 2, 2
+BE
+B.
+
+size 2 3, 4
+BEB
+B.B
+
+size 2 4, 4
+BBBB
+E...
+
+size 2 5, 5
+BBBBB
+E....
+
+size 2 6, 6
+BBBBBB
+E.....
+
+size 2 7, 7
+BBBBBBB
+E......
+
+size 2 8, 8
+BBBBBBBB
+E.......
+
+size 3 1, 2
+B
+E
+B
+
+size 3 2, 4
+BB
+E.
+BB
+
+size 3 3, 6
+BEB
+B.B
+B.B
+
+size 3 4, 8
+BBBB
+E...
+BBBB
+
+size 3 5, 10
+BBBBB
+E....
+BBBBB
+
+size 3 6, 12
+BBBBBB
+E.....
+BBBBBB
+
+size 3 7, 14
+BBBBBBB
+E......
+BBBBBBB
+
+size 3 8, 16
+BBBBBBBB
+E.......
+BBBBBBBB
+
+size 4 1, 2
+B
+E
+.
+B
+
+size 4 2, 4
+BE
+B.
+B.
+B.
+
+size 4 3, 8
+BEB
+B.B
+B.B
+B.B
+
+size 4 4, 9
+.B.B
+BB.B
+...E
+BBBB
+
+size 4 5, 11
+..B.B
+BBB.B
+....E
+BBBBB
+
+size 4 6, 14
+B.BB.B
+B.BB.B
+.....E
+BBBBBB
+
+size 4 7, 16
+.B.BB.B
+BB.BB.B
+......E
+BBBBBBB
+
+size 4 8, 18
+..B.BB.B
+BBB.BB.B
+.......E
+BBBBBBBB
+
+size 5 1, 2
+B
+E
+.
+.
+B
+
+size 5 2, 5
+BE
+B.
+B.
+B.
+B.
+
+size 5 3, 10
+BEB
+B.B
+B.B
+B.B
+B.B
+
+size 5 4, 11
+...B
+BB.B
+BB.B
+...E
+BBBB
+
+size 5 5, 14
+....B
+BBB.B
+BBB.B
+....E
+BBBBB
+
+size 5 6, 18
+B.BB.B
+B.BB.B
+B.BB.B
+.....E
+BBBBBB
+
+size 5 7, 20
+...BB.B
+BB.BB.B
+BB.BB.B
+......E
+BBBBBBB
+
+size 5 8, 23
+....BB.B
+BBB.BB.B
+BBB.BB.B
+.......E
+BBBBBBBB
+
+size 6 1, 2
+B
+E
+.
+.
+.
+B
+
+size 6 2, 6
+BE
+B.
+B.
+B.
+B.
+B.
+
+size 6 3, 12
+BEB
+B.B
+B.B
+B.B
+B.B
+B.B
+
+size 6 4, 14
+BB.B
+...B
+BB.B
+BB.B
+...E
+BBBB
+
+size 6 5, 18
+BBB.B
+....B
+BBB.B
+BBB.B
+....E
+BBBBB
+
+size 6 6, 22
+BBBB.B
+.....B
+BBBB.B
+BBBB.B
+.....E
+BBBBBB
+
+size 6 7, 26
+BBBBB.B
+......B
+BBBBB.B
+BBBBB.B
+......E
+BBBBBBB
+
+size 6 8, 30
+BBBBBB.B
+.......B
+BBBBBB.B
+BBBBBB.B
+.......E
+BBBBBBBB
+
+size 7 1, 2
+B
+E
+.
+.
+.
+.
+B
+
+size 7 2, 7
+BE
+B.
+B.
+B.
+B.
+B.
+B.
+
+size 7 3, 14
+BEB
+B.B
+B.B
+B.B
+B.B
+B.B
+B.B
+
+size 7 4, 16
+.B.B
+BB.B
+...B
+BB.B
+BB.B
+...E
+BBBB
+
+size 7 5, 20
+.BB.B
+.BB.B
+....B
+BBB.B
+BBB.B
+....E
+BBBBB
+
+size 7 6, 26
+B.BB.B
+B.BB.B
+B.BB.B
+B.BB.B
+B.BB.B
+.....B
+BBBBEB
+
+size 7 7, 29
+.B.BB.B
+BB.BB.B
+......B
+BBBBB.B
+BBBBB.B
+......E
+BBBBBBB
+
+size 7 8, 33
+..B.BB.B
+BBB.BB.B
+.......B
+BBBBBB.B
+BBBBBB.B
+.......E
+BBBBBBBB
+
+size 8 1, 2
+B
+E
+.
+.
+.
+.
+.
+B
+
+size 8 2, 8
+BE
+B.
+B.
+B.
+B.
+B.
+B.
+B.
+
+size 8 3, 16
+BEB
+B.B
+B.B
+B.B
+B.B
+B.B
+B.B
+B.B
+
+size 8 4, 18
+.B.B
+.B.B
+BB.B
+...B
+BB.B
+BB.B
+...E
+BBBB
+
+size 8 5, 23
+.BB.B
+.BB.B
+.BB.B
+....B
+BBB.B
+BBB.B
+....E
+BBBBB
+
+size 8 6, 30
+B.BB.B
+B.BB.B
+B.BB.B
+B.BB.B
+B.BB.B
+B.BB.B
+.....B
+BBBBEB
+
+size 8 7, 33
+...BB.B
+BB.BB.B
+BB.BB.B
+......B
+BBBBB.B
+BBBBB.B
+......E
+BBBBBBB
+
+size 8 8, 38
+....BB.B
+BBB.BB.B
+BBB.BB.B
+.......B
+BBBBBB.B
+BBBBBB.B
+.......E
+BBBBBBBB

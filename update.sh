@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [ "$#" != "1"]; then
+if [ "$#" != "1" ]; then
+	echo "Empty <commit mesage>"
 	echo "Usage: $0 <commit message>"
 	exit
 fi

@@ -62,7 +62,7 @@ void init_rmq(int n)
 		}
 	}
 }
-int lcp(int a, int b)
+int lcp(int a, int b)  // LCP
 {
 	//a = rank[a], b = rank[a];
 	if (a > b) swap(a, b);
