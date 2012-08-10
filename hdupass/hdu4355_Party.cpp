@@ -1,4 +1,5 @@
 /* Party All the Time
+ * 单调函数用二分查找，凹函数或者凸函数用三分查找，即先找中点，再找左区间或者右区间的中点，比较，缩小区间。
  * */
 #include <cstdio>
 #include <cstring>
