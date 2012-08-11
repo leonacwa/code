@@ -10,14 +10,14 @@ struct Point {
 llong cross(const Point &A, const Point &B, const Point &C) {
     return (A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x);
 }
-/* 
+/* 多边形的点的数组必须是有序的
  **/
 bool bin(int &l, int &r, const Point &p)
 {
-    while (l+1 < r) {
+    while (l+1 < r) { // 先判断点落在哪两个点的区间内。
         int m = (l + r) >> 1;
         if (cross(p, pt[m], pt[0]) <= 0) r = m;
-        } else l = m;
+        else l = m;
     }
     if (cross(pt[l], p, pt[0]) <= 0 && cross(p, pt[r], pt[0]) <= 0) {
         return true;
