@@ -1,13 +1,11 @@
-/* 最小费用流
- * 邻接表 + SPFA + Dinic
- * 时间复杂度：O(V*E*f)
+/* Minimum Cost
+ * 最小费用最大流
  * */
 #include <cstdio>
 #include <cstring>
-#include <climits>
 
-const int MAXN = 50005;
-const int INF = INT_MAX / 2;
+const int MAXN = 115, MAXM = 25600;
+const int INF = 99999;
 
 struct Edge {
 	int to;
@@ -15,8 +13,8 @@ struct Edge {
 	int next;
 	Edge(int tto=0, int tc=0, int tw=0, int tn=-1) : to(tto), c(tc), w(tw), next(tn) {}
 };
-Edge E[MAXN * 4];
-int nE, V[MAXN]; // nE 边数，V[]顶点的边链表头，顶点初始化为-1, nE初始化为0
+Edge E[MAXM];
+int nE, V[MAXN]; // nE 边数，V[]顶点的边链表头
 
 int pre[MAXN];
 int path[MAXN];
@@ -36,10 +34,6 @@ void addEdge(int u, int v, int c, int w, int rc = 0) { // rc是反向弧的容�
 	V[v] = nE++;
 }
 
-/* SPFA，根据需要使用cnt[]数组统计顶点入队次数，入队次数>=n则表示存在负权环，
- * 也可以使用dfs深搜，如果遇到已经出现的点说明存在负权环
- * 实际中SPFA算法的效率不稳定，可以使用更加稳定的Dijkstra算法
- * */
 bool SPFA(int n, int source, int sink) {
 	int *fr = que, *ta = que;
 	for (int i = 0; i < n; ++i) sp[i] = INF, inq[i] = false;
@@ -92,46 +86,67 @@ int argument(int n, int source, int sink) {
 	return delta;
 }
 // 最小费用最大流
-// 返回最大流的最小费用
-int mincost_maxflow(int n, int source, int sink) {
-	int cost = 0; // 费用流 = 费用x流
+void mincost_maxflow(int n, int source, int sink, int &flow, int &cost) {
+	flow = 0, cost = 0;
 	while ( SPFA(n, source, sink) ) {
 		int delta = argument(n, source, sink);
-		cost += delta * sp[sink];
+		flow += delta;
+		cost += sp[sink] * delta;
 	}
-	return cost;
 }
 
-int main()
-{
-	int n, k, nn, source, sink;
-	while (EOF != scanf("%d%d", &n, &k)) {
-		nn = n * n;
-		source = 2 * nn;
-		sink = 2 * nn + 1;
-		initNetwork();
+int need[MAXN][MAXN], have[MAXN][MAXN], n_sum[MAXN], h_sum[MAXN];
+
+int main() {
+	int n, m, k;
+	while (EOF != scanf("%d%d%d", &n, &m, &k)) {
+		if (n == 0 && m == 0 && k == 0) break;
+		memset(n_sum, 0, sizeof(n_sum));
+		memset(h_sum, 0, sizeof(h_sum));
 		for (int i = 0; i < n; ++i) {
-			for (int j = 0, d, u, v; j < n; ++j) {
-				scanf("%d", &d);
-				u = i * n + j;
-				addEdge(u, nn + u, 1, -d);
-				if (i+1 < n) {
-					v = (i + 1) * n + j;
-					addEdge(u, v, INF, 0);
-					addEdge(nn+u, v, INF, 0);
-					addEdge(nn+u, nn+v, INF, 0);
-				}
-				if (j+1 < n) {
-					v = i * n + j + 1;
-					addEdge(u, v, INF, 0);
-					addEdge(nn+u, v, INF, 0);
-					addEdge(nn+u, nn+v, INF, 0);
-				}
+			for (int j = 0; j < k; ++j) {
+				scanf("%d", &need[i][j]);
+				n_sum[j] += need[i][j];
 			}
 		}
-		addEdge(source, 0, k,  0);
-		addEdge(2*nn - 1, sink, k,  0);
-		printf("%d\n", -mincost_maxflow(2*nn + 2, source, sink));
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < k; ++j) {
+				scanf("%d", &have[i][j]);
+				h_sum[j] += have[i][j];
+			}
+		}
+		bool can = true;
+		for (int i = 0; i < k; ++i) {
+			if (h_sum[i] < n_sum[i]) {
+				can = false;
+				break;
+			}
+		}
+		int cost, flow, ans = 0;
+		int source = n+m, sink = n+m+1;
+		for (int c = 0, w; c < k; ++c) {
+			if (can) initNetwork(n+m+2);
+			for (int a = 0; a < n; ++a) {
+				for (int b = 0; b < m; ++b) {
+					scanf("%d", &w);
+					if (can) addEdge(b, m+a, INF, w);
+				}
+			}
+			if (!can) continue;
+			for (int i = 0; i < m; ++i) {
+				addEdge(source, i, have[i][c], 0);
+			}
+			for (int i = 0; i < n; ++i) {
+				addEdge(m+i, sink, need[i][c], 0);
+			}
+			mincost_maxflow(n+m+2, source, sink, flow, cost);
+			ans += cost;
+		}
+		if (can) {
+			printf("%d\n", ans);
+		} else {
+			puts("-1");
+		}
 	}
 	return 0;
 }

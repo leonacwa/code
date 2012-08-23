@@ -31,8 +31,7 @@ void addEdge(int u, int v, int c, int rc = 0) { // c 正向弧容量，rc反向�
 	head[v] = nE++;
 }
 
-void initNetwork(int n = -1) { // head[] 数组初始化为-1
-	if (n == -1) n = MAXN;
+void initNetwork(int n = MAXN) { // head[] 数组初始化为-1
 	memset(head, -1, sizeof(head[0])*MAXN);
 	nE = 0;
 }

@@ -1,13 +1,11 @@
-/* 最小费用流
- * 邻接表 + SPFA + Dinic
- * 时间复杂度：O(V*E*f)
+/* Minimum Cost
+ * 最小费用最大流
  * */
 #include <cstdio>
 #include <cstring>
-#include <climits>
 
-const int MAXN = 50005;
-const int INF = INT_MAX / 2;
+const int MAXN = 50005, MAXM = 300000;
+const int INF = 99999999;
 
 struct Edge {
 	int to;
@@ -15,8 +13,8 @@ struct Edge {
 	int next;
 	Edge(int tto=0, int tc=0, int tw=0, int tn=-1) : to(tto), c(tc), w(tw), next(tn) {}
 };
-Edge E[MAXN * 4];
-int nE, V[MAXN]; // nE 边数，V[]顶点的边链表头，顶点初始化为-1, nE初始化为0
+Edge E[MAXM];
+int nE, V[MAXN]; // nE 边数，V[]顶点的边链表头
 
 int pre[MAXN];
 int path[MAXN];
@@ -41,17 +39,21 @@ void addEdge(int u, int v, int c, int w, int rc = 0) { // rc是反向弧的容�
  * 实际中SPFA算法的效率不稳定，可以使用更加稳定的Dijkstra算法
  * */
 bool SPFA(int n, int source, int sink) {
-	int *fr = que, *ta = que;
+	int *fr = que, *ta = que, q_cnt;
+	int qsum = 0;
 	for (int i = 0; i < n; ++i) sp[i] = INF, inq[i] = false;
 	pre[source] = -1;
 	sp[source] = 0;
 	*ta++ = source;
+	q_cnt = 1;
 	inq[source] = true;
 	while (fr != ta) {
 		if (fr == que + MAXN) fr = que;
 		int u = *fr++;
-		// 未添加该优化：LLL, Large Label Last 队首的距离比队列的平均距离大的则移到队尾，否则取出, 50%的速度提高
+		// LLL, Large Label Last 进行优化, 50%的速度提高
+		double avg_x = q_sum*1.0 / q_cnt;
 		inq[u] = false;
+		--q_cnt;
 		for (int i = V[u], v; i != -1; i = E[i].next) {
 			v = E[i].to;
 			if (E[i].c > 0 && sp[v] > sp[u] + E[i].w) {
@@ -59,9 +61,8 @@ bool SPFA(int n, int source, int sink) {
 				pre[v] = u;
 				path[v] = i;
 				if (false == inq[v]) {
-					/* SLF Smal Label First 距离更短的顶点在队列前，此优化效果非常明显，推荐使用
-					 * 也可以使用 LLL, Large Label Last 进行优化
-					 * */
+					if (v == sink) return true;
+					// SLF Smal Label First 距离更短的顶点在队列前，此优化效果非常明显, 15~20%的速度提高
 					if (fr != ta && sp[*fr] > sp[v]) {
 						fr--;
 						if (fr < que) fr = que + MAXN - 1;
@@ -70,6 +71,8 @@ bool SPFA(int n, int source, int sink) {
 						if (ta == que + MAXN) ta = que;
 						*ta++ = v;
 					}
+					++q_cnt;
+					q_sum += sp[v];
 					inq[v] = true;
 				}
 			}
@@ -92,46 +95,51 @@ int argument(int n, int source, int sink) {
 	return delta;
 }
 // 最小费用最大流
-// 返回最大流的最小费用
-int mincost_maxflow(int n, int source, int sink) {
-	int cost = 0; // 费用流 = 费用x流
+void mincost_maxflow(int n, int source, int sink, int &flow, int &cost) {
+	flow = 0, cost = 0;
 	while ( SPFA(n, source, sink) ) {
 		int delta = argument(n, source, sink);
-		cost += delta * sp[sink];
+		flow += delta;
+		cost += sp[sink] * delta;
 	}
-	return cost;
 }
 
-int main()
-{
-	int n, k, nn, source, sink;
-	while (EOF != scanf("%d%d", &n, &k)) {
-		nn = n * n;
-		source = 2 * nn;
-		sink = 2 * nn + 1;
-		initNetwork();
-		for (int i = 0; i < n; ++i) {
-			for (int j = 0, d, u, v; j < n; ++j) {
-				scanf("%d", &d);
-				u = i * n + j;
-				addEdge(u, nn + u, 1, -d);
-				if (i+1 < n) {
-					v = (i + 1) * n + j;
-					addEdge(u, v, INF, 0);
-					addEdge(nn+u, v, INF, 0);
-					addEdge(nn+u, nn+v, INF, 0);
-				}
-				if (j+1 < n) {
-					v = i * n + j + 1;
-					addEdge(u, v, INF, 0);
-					addEdge(nn+u, v, INF, 0);
-					addEdge(nn+u, nn+v, INF, 0);
+int main() {
+	int n, m, k;
+	while (EOF != scanf("%d%d%d", &n, &m, &k)) {
+		if (n == 0 && m == 0 && k == 0) break;
+		int source = n*k + m*k;
+		int sink = source + 1;
+		int total = 0;
+		initNetwork(sink + 1);
+		for (int i = 0, c; i < n; ++i) {
+			for (int j = 0; j < k; ++j) {
+				scanf("%d", &c);
+				total += c;
+				addEdge(i*k+j, sink, c, 0);
+			}
+		}
+		for (int i = 0, c; i < m; ++i) {
+			for (int j = 0; j < k; ++j) {
+				scanf("%d", &c);
+				addEdge(source, n*k + i*k+j, c, 0);
+			}
+		}
+		for (int c = 0, w; c < k; ++c) {
+			for (int a = 0; a < n; ++a) {
+				for (int b = 0; b < m; ++b) {
+					scanf("%d", &w);
+					addEdge(n*k + b*k+c, a*k+c, INF, w);
 				}
 			}
 		}
-		addEdge(source, 0, k,  0);
-		addEdge(2*nn - 1, sink, k,  0);
-		printf("%d\n", -mincost_maxflow(2*nn + 2, source, sink));
+		int cost, flow;
+		mincost_maxflow(sink + 1, source, sink, flow, cost);
+		if (flow == total) {
+			printf("%d\n", cost);
+		} else {
+			puts("-1");
+		}
 	}
 	return 0;
 }
