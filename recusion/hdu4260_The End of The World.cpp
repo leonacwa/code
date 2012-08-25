@@ -1,5 +1,6 @@
 /* The End of The World
  * 汉诺塔问题的变形
+ * 给出汉诺塔最优解法时的一个状态，求剩余多少状态
  * */
 #include <cstring>
 #include <iostream>
