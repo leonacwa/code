@@ -1,4 +1,4 @@
-/*  Paper Presentation
+/* UVALive 4333 - Paper Presentation
  *  */
 #include <cstdio>
 #include <cstring>
@@ -48,15 +48,19 @@ int dp(int s) {
 	return f[s];
 }
 
-int main() {
+void init_C() {
 	memset(c, 0, sizeof(c));
 	c[0][0] = 1;
 	for (int b = 1; b <= M*2; ++b) {
-		c[0][b] = 1;
-		for (int a = 1; a <= b; ++a) {
+		c[0][b] = c[b][b] = 1;
+		for (int a = 1; a < b; ++a) {
 			c[a][b] = c[a][b-1] + c[a-1][b-1];
 		}
 	}
+}
+
+int main() {
+	init_C();
 	int runs, m2;
 	scanf("%d", &runs);
 	while (runs--) {
@@ -79,7 +83,7 @@ int main() {
 			n = 1;
 			list[0] = i;
 			for (int j = 0; j < m2; ++j) {
-				if (find(i) == find(j) && id[j] == -1) {
+				if (i != j && find(i) == find(j) && id[j] == -1) {
 					id[j] = n;
 					list[n] = j;
 					++n;
@@ -113,17 +117,12 @@ int main() {
 				can = false;
 				break;
 			}
-			/*
-			   printf("set %d %d\n", cnt[cnt_set], sum[cnt_set]);
-			   for (int i = 0; i < n; ++i) printf("%d ", list[i]);
-			   puts("");
-			   */
 			cnt_set++;
 		}
 
 		int64 ans = 0;
 		if (can) {
-			for (int s = (1<<cnt_set) -1; s; --s) {
+			for (int s = (1<<cnt_set) - 1; s > 0; --s) {
 				int total = 0, size = 0, list[2*M];
 				for (int i = 0; i < cnt_set; ++i) {
 					if (!(s & (1<<i))) continue;
@@ -135,8 +134,20 @@ int main() {
 				for (int i = 0; i < size; ++i) {
 					int li = list[i];
 					//			printf("C:%d %d = %d\n", cnt[li], total, C(cnt[li], total));
-					cs *= c[cnt[li]][total];
-					cs *= sum[li];
+					cs *= c[cnt[li]][total] * sum[li];
+					total -= cnt[li];
+				}
+				total = size = 0;
+				for (int i = 0; i < cnt_set; ++i) {
+					if ((s & (1<<i))) continue;
+					list[size++] = i;
+					total += cnt[i];
+				}
+				for (int i = 0; i < size; ++i) {
+					int li = list[i];
+					//			printf("C:%d %d = %d\n", cnt[li], total, C(cnt[li], total));
+					cs *= c[cnt[li]][total] * sum[li];
+					total -= cnt[li];
 				}
 				ans += cs;
 			}
