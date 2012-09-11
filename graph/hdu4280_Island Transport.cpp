@@ -96,24 +96,51 @@ struct Point {
 	int x,y;
 } p[100005];
 
+template <class T>
+int scan_i(T &x) {
+	int ch;
+	bool ne = false;
+	while (EOF != (ch = getchar()) && ('0' > ch || ch > '9') && ch != '-') ;
+	if (EOF == ch) return EOF;
+	if (ch == '-') {
+		ne = 1;
+		ch = getchar();
+	}
+	x = 0;
+	while ('0' <= ch && ch <= '9') {
+		x *= 10;
+		x += ch - '0';
+		ch = getchar();
+	}
+	if (ne) x = -x;
+	return 1;
+}
 
 int main()
 {
 	int runs;
-	scanf("%d", &runs);
+	//scanf("%d", &runs);
+	scan_i(runs);
 	while(runs--) {
 		int n, m;
-		scanf("%d%d", &n, &m);
+	//	scanf("%d%d", &n, &m);
+		scan_i(n);
+		scan_i(m);
 		int sink = 1, source = 1;
 		for(int i = 1; i <= n;i++) {
-			scanf("%d%d",&p[i].x,&p[i].y);
+			//scanf("%d%d", &p[i].x, &p[i].y);
+			scan_i(p[i].x);
+			scan_i(p[i].y);
 			if(p[i].x<p[source].x) source = i;
 			if(p[i].x>p[sink].x) sink = i;
 		}
 		initNetwork(n+1);
 		while(m--) {
 			int a, b, c;
-			scanf("%d%d%d", &a, &b, &c);
+			//scanf("%d%d%d", &a, &b, &c);
+			scan_i(a);
+			scan_i(b);
+			scan_i(c);
 			addEdge(a-1, b-1, c);
 			addEdge(b-1, a-1, c);
 		}
