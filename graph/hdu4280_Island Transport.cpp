@@ -1,37 +1,32 @@
+/* HDU 4280 Island Transport
+ * 最大流水过，其实应该是用对偶图转换，然后用最短路求解
+ * */
 #include <cstdio>
 #include <cstring>
 #include <climits>
 
-/* 最大流SAP 邻接表
- * GAP + 当前弧优化
- * GAP: 间隙优化
- * 当前弧：是的每次寻找增广路时间变为O(V)
- * */
-
-const int INF = INT_MAX / 3;
-const int MAXN = 20000 + 5;
+const int INF = INT_MAX / 2;
+const int MAXN = 100000 + 5;
 const int MAXM = 200000 + 5;
 
 struct Edge {
 	int u, v;
 	int c;
 	int next;
-	Edge() {}
-	Edge(int tu, int tv, int tc, int tn) : u(tu), v(tv), c(tc), next(tn) {}
+	Edge(int tu=0, int tv=0, int tc=0, int tn=0) : u(tu), v(tv), c(tc), next(tn) {}
 };
 
 Edge E[MAXM * 3];
-// head[]顶点弧表表头
 int nE, head[MAXN], cnt[MAXN], que[MAXN], d[MAXN], low[MAXN], cur[MAXN];
 
-void addEdge(int u, int v, int c, int rc = 0) { // c 正向弧容量，rc反向弧容量
+void addEdge(int u, int v, int c, int rc = 0) {
 	E[nE]= Edge(u, v, c, head[u]);
 	head[u] = nE++;
 	E[nE]= Edge(v, u, rc, head[v]);
 	head[v] = nE++;
 }
 
-void initNetwork(int n = MAXN) { // head[] 数组初始化为-1
+void initNetwork(int n = MAXN) {
 	memset(head, -1, sizeof(head[0])*n);
 	nE = 0;
 }
@@ -55,7 +50,7 @@ int maxflow(int n, int source, int sink) {
 	int flow = 0, u = source, top = 0;
 	low[0] = INF;
 	for (int i = 0; i < n; ++i) cur[i] = head[i];
-	while (d[source] < n) { // que类似于pre数组，存的是边
+	while (d[source] < n) {
 		int &i = cur[u];
 		for (; i != -1; i = E[i].next) {
 			if (E[i].c > 0 && d[u] == d[E[i].v] + 1) {
@@ -97,22 +92,32 @@ int maxflow(int n, int source, int sink) {
 	}
 	return flow;
 }
+struct Point {
+	int x,y;
+} p[100005];
+
 
 int main()
 {
-	int n, m;
-	while (EOF != scanf("%d%d", &n, &m)) {
-		initNetwork(n+2);
-		for (int i = 1, a, b; i <= n; ++i) {
-			scanf("%d%d", &a, &b);
-			addEdge(0, i, a, 0);
-			addEdge(i, n+1, b, 0);
+	int runs;
+	scanf("%d", &runs);
+	while(runs--) {
+		int n, m;
+		scanf("%d%d", &n, &m);
+		int sink = 1, source = 1;
+		for(int i = 1; i <= n;i++) {
+			scanf("%d%d",&p[i].x,&p[i].y);
+			if(p[i].x<p[source].x) source = i;
+			if(p[i].x>p[sink].x) sink = i;
 		}
-		for (int i = 0, u, v, w; i < m; ++i) {
-			scanf("%d%d%d", &u, &v, &w);
-			addEdge(u, v, w, w);
+		initNetwork(n+1);
+		while(m--) {
+			int a, b, c;
+			scanf("%d%d%d", &a, &b, &c);
+			addEdge(a-1, b-1, c);
+			addEdge(b-1, a-1, c);
 		}
-		printf("%d\n", maxflow(n+2, 0, n+1));
+		printf("%d\n",maxflow(n, source-1, sink-1));
 	}
 	return 0;
 }
