@@ -53,6 +53,7 @@ void makeTree(int rt, int L, int R) {
 		sf[L] = false;
 		return;
 	}
+	if (L > R) return;
 	int M = (L + R) >> 1;
 	makeTree(LS, L, M);
 	makeTree(RS, M+1, R);
@@ -67,6 +68,7 @@ void update(int rt, int L, int R, int x, bool f) {
 		}
 		return;
 	}
+	if (L > R) return;
 	int M = (L + R) >> 1;
 	if (x <= M) update(LS, L, M, x, f);
 	else update(RS, M+1, R, x, f);
@@ -87,8 +89,7 @@ int main() {
 			}
 		}
 		sort(a+1, a+tot+1);
-		int *end = unique(a+1, a+tot+1);
-		tot = end - a - 1;
+		tot = unique(a+1, a+tot+1)- a - 1;
 		makeTree(1, 1, tot);
 		for (int i = 0; i < n; ++i) {
 			if (op[i].c == 's') {
