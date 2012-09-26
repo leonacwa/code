@@ -1,7 +1,6 @@
-/* 最小费用流
- * 邻接表 + SPFA + Dinic
- * 时间复杂度：O(V*E*f)
- * 比赛的时候建议封装成一个结构体进行使用
+/* HDU4411 Arrest
+ * 本质是有上下界的最小费用最大流，但是因为题目的特殊性，可以变成最小费用最大流。
+ * 拆点，必须经过的拆为两点，流量为1，费用为一个很小的负数，这样在选择路径的时候，就一定会选择这些必须经过的点。
  * */
 #include <cstdio>
 #include <cstring>
@@ -37,11 +36,6 @@ struct Network {
 		E[nE] = Edge(u, rc, -w, V[v]);
 		V[v] = nE++;
 	}
-	/* SPFA，根据需要使用cnt[]数组统计顶点入队次数，入队次数>=n则表示存在负权环，
-	 * 也可以使用dfs深搜，如果遇到已经出现的点说明存在负权环
-	 * 实际中SPFA算法的效率不稳定，可以使用更加稳定的Dijkstra算法
-	 * */
-
 	bool SPFA(int n, int source, int sink) {
 		int *fr = que, *ta = que; /* 注意fr和ta要一直指向正确的内存位置 */
 		for (int i = 0; i < n; ++i) sp[i] = INF, inq[i] = false;
@@ -105,38 +99,41 @@ struct Network {
 	}
 };
 Network net;
+int g[105][105];
 
-
-int main()
-{
-	int n, k, nn, source, sink;
-	while (EOF != scanf("%d%d", &n, &k)) {
-		nn = n * n;
-		source = 2 * nn;
-		sink = 2 * nn + 1;
-		net.init();
-		for (int i = 0; i < n; ++i) {
-			for (int j = 0, d, u, v; j < n; ++j) {
-				scanf("%d", &d);
-				u = i * n + j;
-				net.addEdge(u, nn + u, 1, -d);
-				if (i+1 < n) {
-					v = (i + 1) * n + j;
-					net.addEdge(u, v, INF, 0);
-					net.addEdge(nn+u, v, INF, 0);
-					net.addEdge(nn+u, nn+v, INF, 0);
-				}
-				if (j+1 < n) {
-					v = i * n + j + 1;
-					net.addEdge(u, v, INF, 0);
-					net.addEdge(nn+u, v, INF, 0);
-					net.addEdge(nn+u, nn+v, INF, 0);
+int main() {
+	int n, m, kk;
+	while (EOF != scanf("%d%d%d", &n, &m, &kk) && n+m+kk) {
+		for (int i = 0; i <= n; ++i) {
+			for (int j = 0; j <= n; ++j) g[i][j] = INF;
+			g[i][i] = 0;
+		}
+		for (int i = 0; i < m; ++i) {
+			int a, b, c;
+			scanf("%d%d%d", &a, &b, &c);
+			g[a][b] = g[b][a] = min(g[a][b], c);
+		}
+		for (int k = 0; k <= n; ++k) {
+			for (int i = 0; i <= n; ++i) {
+				for (int j = 0; j <= n; ++j) {
+					g[i][j] = min(g[i][j], g[i][k] + g[k][j]);
 				}
 			}
 		}
-		net.addEdge(source, 0, k,  0);
-		net.addEdge(2*nn - 1, sink, k,  0);
-		printf("%d\n", -net.mincost_maxflow(2*nn + 2, source, sink));
+		net.init();
+		int source = n*2+1, sink = n*2+2;
+		net.addEdge(source, 0, kk, 0);
+		net.addEdge(0, sink, kk, 0);
+		for (int i = 1; i <= n; ++i) {
+			net.addEdge(i, i+n, 1, -INF);
+			net.addEdge(0, i, 1, g[0][i]);
+			net.addEdge(i+n, sink, 1, g[0][i]);
+			for (int j = i+1; j <= n; ++j) {
+				if (g[i][j] < INF) net.addEdge(i+n, j, 1, g[i][j]);
+			}
+		}
+		int ans = net.mincost_maxflow(n*2+3, source, sink) + n*INF;
+		printf("%d\n", ans);
 	}
 	return 0;
 }
