@@ -1,21 +1,11 @@
-/* 后缀数组倍增算法
- * 并且计算了height[], height[i] = LCP(i-1, i),  LCP(i, j)=lcp(suffix(sa[i]), suffix(sa[j])) 
- * 时间复杂度：N*logN
-
- 后缀数组sa：SA 是一个一维数组，它保存1..n 的某个排列SA[1],SA[2],...SA[n]，并且保证Suffix(SA[i])<Suffix(SA[i+1]),1≤i<n。也就是将S的n 个后缀从小到大进行排序之后把排好序的后缀的开头位置顺次放入SA中。
- 
- 名次数组rank[]: 名次数组Rank=SA^-1，也就是说若SA[i]=j，则Rank[j]=i
- 
- 最长公共前缀：lcp(u,v)=max{i|u[i]=v[i]}，也就是从头开始顺次比较u 和v 的对应字符，对应字符持续相等的最大位置，称为这两个字符串的最长公共前缀。
- 
-  LCP(i,j)=lcp(Suffix(SA[i]),Suffix(SA[j]))
-  
-  height[i]=LCP(i-1,i)
-  
+/* HDU 4416  Good Article Good sentence
  * */
 #include <cstdio>
+#include <cstring>
 #include <algorithm>
 using namespace std;
+
+typedef long long int64;
 
 const int MAXN = 300005;
 const int LOG_MAXN = 19;
@@ -93,13 +83,34 @@ SuffixArray sa;
 char str[MAXN];
 int num[MAXN];
 
-int main()
-{
-	// input
-	int n;
-	for (n = 0; num[n] = str[n]; ++n) ;
-	sa.init(num, n, 128); // 128 是ascii字符集中字符个数
-	sa.init_rmq(n);
+int main() {
+	int runs;
+	scanf("%d", &runs);
+	for (int ca = 1; ca <= runs; ++ca) {
+		int n;
+		scanf("%d", &n);
+		scanf("%s", str);
+		int la = 0, len = 0;
+		for (; str[la]; ++la) num[la] = str[la];
+		num[la] = 127;
+		len = la + 1;
+		for (int i = 0; i < n; ++i) {
+			scanf("%s", str);
+			for (int j = 0; str[j]; ++j) num[len++] = str[j];
+			num[len++] = 128 + i;
+		}
+		sa.init(num, len, 128+n);
+		sa.init_rmq();
+		int64 ans = 0;
+		int b = 1, t;
+		for (int i = 1; i <= len; ++i) {
+			if (sa.sa[i] >= la) continue;
+			while (b <= len && (b <= i || sa.sa[b] <= la)) ++b;
+			if (b <= len) t = max(sa.height[i], sa.LCP(i, b));
+			else t = sa.height[i];
+			ans += la - sa.sa[i] - t;
+		}
+		printf("Case %d: %lld\n", ca, ans);
+	}
 	return 0;
 }
-
