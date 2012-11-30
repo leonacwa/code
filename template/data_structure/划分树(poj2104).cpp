@@ -10,9 +10,6 @@ const int MAXN = 100005;
 const int MAXN_LOG = 18;
 
 struct PartiTree {
-#define rt ((L+R)|(L!=R))
-#define lson ((L+M)|(L!=M))
-#define rson ((M+1+R)|(M+1!=R))
 	int sorted[MAXN];
 	int val[MAXN_LOG][MAXN];
 	int left[MAXN_LOG][MAXN];
@@ -29,7 +26,7 @@ struct PartiTree {
 		}
 		if (L > R) return;
 		int M = (L+R)>>1;
-		int lsame = M - L + 1;
+		int lsame = M - L + 1; /* 左区间跟sorted[M]值相同的元素个数 */
 		for (int i = L; i <= R; ++i) {
 			if (val[d][i] < sorted[M]) --lsame;
 		}
