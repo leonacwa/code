@@ -44,16 +44,10 @@ void AC_construct()
 			if (nd[q][i]) {
 				int v = nd[q][i];
 				*e++ = v;
-				/* 版本1 */
-				while (nd[fail[q]][i] == 0 && fail[q] != 0) fail[q] = fail[fail[q]];
-				fail[v] = nd[fail[q]][i];
-				/**/
-				/* 版本2 *
 				int t = fail[q];
 				while (nd[t][i] == 0 && t != 0) t = fail[t];
 				fail[v] = nd[t][i];
-				**/
-				//ss[v] += ss[fail[v]];
+				ss[v] += ss[fail[v]];
 			} else {
 				nd[q][i] = nd[fail[q]][i];
 			}

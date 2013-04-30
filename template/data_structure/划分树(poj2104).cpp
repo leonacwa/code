@@ -1,5 +1,5 @@
 /* poj 2104 K-th Number
- * 划分树，基于快排
+ * 划分树，基于归并
  * */
 #include <cstdio>
 #include <cstring>

@@ -28,7 +28,7 @@ bool cmp(const Point &A, const Point &B) {
 	return dist2(A, base) < dist2(B, base);
 }
 
-int graham(int n, Point pt[], int st[]) {
+int graham(int n, Point pt[], int st[]) { // 凸包算法有问题
 	if (n <= 2) return n;
 	int p = 0;
 	for (int i = 1; i < n; ++i) {
